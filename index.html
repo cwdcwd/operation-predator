@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Operation Predator</title>
+
+    <!-- libs style sheets -->
+    <link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="libs/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css">
+
+    <!-- app style sheets -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- app header -->
+<header id="main-header">
+    <div>
+        <h1>Technology Heat Map</h1>
+        <a id="main-menu"></a>
+
+        <!-- panel to provide some interactions -->
+        <div id="main-menu-panel" class="hide content">
+            <button id="reset-menu" class="btn btn-sm btn-default">Reset All</button>
+            <section>
+                <h1>Saleability:</h1>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- slider for sale ability -->
+                        <input id="sale-ability-slider" type="text"
+                               data-slider-min="1" data-slider-max="4" data-slider-step="1" data-slider-value="4"/>
+                    </div>
+                    <span id="sale-ability-slider-val-label"></span>
+                </div>
+            </section>
+
+            <section>
+                <h1>Community Readiness:</h1>
+                <!-- button to toggle all ready technologies -->
+                <button id="mark-ready" class="btn btn-sm btn-default">Mark Ready</button>
+            </section>
+
+            <section>
+                <h1>Technology Type:</h1>
+
+                <!-- dropdown for filter technologies by type -->
+                <div class="dropdown">
+                    <a id="tech-type-selector" data-target="#" href="" data-toggle="dropdown" role="button"
+                       class="btn btn-sm btn-default"></a>
+                    <ul class="dropdown-menu" id="tech-type-list">
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h1>Export a snapshot:</h1>
+
+                <!-- TODO impl this export function -->
+                <div class="row">
+                    <label class="radio-inline col-md-2 col-md-offset-1">
+                        <input type="radio" name="imageFormat" id="export-png" value="png" checked>PNG
+                    </label>
+                    <label class="radio-inline col-md-2">
+                        <input type="radio" name="imageFormat" id="export-jpg" value="jpg">JPG
+                    </label>
+                    <a id="export-as-png" class="btn btn-sm btn-default col-md-offset-1">Export</a>
+                </div>
+            </section>
+        </div>
+    </div>
+    <img class="logo" src="img/logo.png"/>
+</header>
+
+<section id="main-content">
+    <div class="loading"></div>
+    <div class="hot-map hide">
+        <svg id="hot-map-svg">
+            <defs>
+                <!-- inner shadow filter -->
+                <filter id="inset-shadow">
+                    <!-- Shadow Offset -->
+                    <feOffset dx="0" dy="0"/>
+                    <!-- Shadow Blur -->
+                    <feGaussianBlur stdDeviation='2' result='offset-blur'/>
+                    <!-- Invert the drop shadow to create an inner shadow -->
+                    <feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse"/>
+                    <!-- Color & Opacity -->
+                    <feFlood flood-color="black" flood-opacity="1" result="color"/>
+                    <!-- Clip color inside shadow -->
+                    <feComposite operator="in" in="color" in2="inverse" result="shadow"/>
+                    <!-- Shadow Opacity -->
+                    <feComponentTransfer in="shadow" result="shadow">
+                        <feFuncA type="linear" slope=".75"/>
+                    </feComponentTransfer>
+                    <!-- Put shadow over original object -->
+                    <feComposite operator="over" in="shadow" in2="SourceGraphic"/>
+                </filter>
+
+                <!-- enhance the brightness -->
+                <filter id="lighten">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
+                    <feSpecularLighting result="specOut" in="blur" specularConstant="1.2" specularExponent="12"
+                                        lighting-color="#ffffff">
+                        <feDistantLight azimuth="35" elevation="35"/>
+                    </feSpecularLighting>
+                    <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" k1="0" k2="1" k3="1"
+                                 k4="0"/>
+                </filter>
+            </defs>
+        </svg>
+    </div>
+    <div class="legend">
+        <!-- Hot legend -->
+        <span>Hot</span>
+        <ul>
+            <li class="first"></li>
+            <li class="second"></li>
+            <li class="third"></li>
+            <li class="fourth"></li>
+            <li class="fifth"></li>
+        </ul>
+        <span>Cold</span>
+    </div>
+</section>
+
+<!-- indicator footger -->
+<footer id="main-footer">
+    <img src="img/indicator.svg"/>
+    <span>Indicates technologies widely used on Topcoder</span>
+</footer>
+
+<!-- app libs from bower -->
+<script src="libs/lodash/lodash.min.js"></script>
+<script src="libs/async/dist/async.min.js"></script>
+<script src="libs/jquery/dist/jquery.min.js"></script>
+<script src="libs/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="libs/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+<script src="libs/d3/d3.min.js"></script>
+
+<!-- app source files -->
+<script src="js/config.js"></script>
+<script src="js/tabletop.js"></script>
+<script src="js/controller.js"></script>
+<script src="js/view.js"></script>
+<script src="js/hotmap.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
