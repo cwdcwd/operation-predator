@@ -130,8 +130,10 @@
                 break;
             case self._eventNames.EXPORT:
                 $('#export-as-png').on('click', function () {
-                    //TODO impl this export function based on a 'canvas' solution
-                    fn();
+                    if (document.getElementById('export-png').checked) {
+                        return fn('png');
+                    }
+                    fn('jpg');
                 });
 
                 break;

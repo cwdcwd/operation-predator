@@ -13,12 +13,12 @@
     var HIDE_CLASS          = 'hide',
         EDGE_LENGTH_OF_CELL = 117,
         MARGIN_OF_CELL      = 12,
-        HOT_CLASSES_MAPPING = {
-            1: 'very-hot',
-            2: 'some-hot',
-            3: 'so-so',
-            4: 'no-hot',
-            5: 'never-hot'
+        HOT_FILL_MAPPING = {
+            1: '#EB6045',
+            2: '#FDC171',
+            3: '#D2EC9B',
+            4: '#69C3A4',
+            5: '#4AA3B1'
         };
 
     function ViewManager(options) {
@@ -105,13 +105,13 @@
     };
 
     /**
-     * generate class for the hot level of each cell
+     * generate fill for the hot level of each cell
      * @param point
      * @returns {*}
      * @private
      */
-    ViewManager.prototype._generateClass = function (point) {
-        return HOT_CLASSES_MAPPING[parseInt(point[this._hotKey])];
+    ViewManager.prototype._generateFill = function (point) {
+        return HOT_FILL_MAPPING[parseInt(point[this._hotKey])];
     };
 
     /**
@@ -216,7 +216,7 @@
             .attr('x', position.x)
             .attr('y', position.y)
             .attr('height', EDGE_LENGTH_OF_CELL)
-            .attr('class', this._generateClass(point))
+            .attr('fill', this._generateFill(point))
             .attr('filter', 'url(#inset-shadow)');
         if (point.numberOfCells > 1) {
             cell.attr('width', (EDGE_LENGTH_OF_CELL * 2 + MARGIN_OF_CELL));
@@ -254,7 +254,7 @@
      * @param iconName
      * @param className
      */
-    ViewManager.prototype.appendIconIfNotExist = function (group, point, iconName, className) {
+    ViewManager.prototype.appendIconIfNotExist = function (group, point, iconDataUri, className) {
         if ((group.selectAll('image.' + className))[0].length > 0) {
             return;
         }
@@ -267,7 +267,7 @@
             .attr('y', (parseInt(y) - 15))
             .attr('width', 60)
             .attr('height', 40)
-            .attr('xlink:href', 'img/' + iconName)
+            .attr('xlink:href', iconDataUri)
             .attr('class', className);
     };
 
