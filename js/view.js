@@ -223,6 +223,8 @@
             this._cellPositions[this._positionIndex + this._numberOfRows].occupied = true;
         } else
             cell.attr('width', EDGE_LENGTH_OF_CELL);
+
+        return cell;
     };
 
     /**
@@ -239,7 +241,7 @@
 
         var group = this._svg.append('g');
 
-        this._renderCell(group, position, point);
+        group.backArea = this._renderCell(group, position, point);
 
         this._renderText(group, position, point);
         this._positionIndex++;

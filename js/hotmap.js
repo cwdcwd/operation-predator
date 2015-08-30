@@ -151,8 +151,8 @@
      */
     HotMap.prototype.resetLight = function () {
         _.forEach(this._dataPoints, function (point) {
-            if (point.cellInTheMap) {
-                point.cellInTheMap.attr('filter', null);
+            if (point.cellInTheMap && point.cellInTheMap.backArea) {
+                point.cellInTheMap.backArea.attr('filter', null);
             }
         });
     };
@@ -166,7 +166,7 @@
         this.resetLight();
         _.forEach(this._dataPoints, function (point) {
             if (point.cellInTheMap && ~possibleValues.indexOf(point[keyInTheDataPoint])) {
-                point.cellInTheMap.attr('filter', 'url(#lighten)');
+                point.cellInTheMap.backArea.attr('filter', 'url(#lighten)');
             }
         });
     };
