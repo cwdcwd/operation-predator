@@ -24,7 +24,47 @@
         this._viewManager = new ViewManager(options);
         this._viewManager.setLoading();
         this._allData = [];
+
+        this._images = {};
     }
+
+    HotMap.prototype._converterEngine = function (input) { // fn BLOB => Binary => Base64 ?
+        var uInt8Array = new Uint8Array(input),
+            i          = uInt8Array.length;
+        var biStr = []; //new Array(i);
+        while (i--) {
+            biStr[i] = String.fromCharCode(uInt8Array[i]);
+        }
+        return global.btoa(biStr.join(''));
+    };
+
+    HotMap.prototype._getImageBase64 = function (url, callback) {
+        var self = this;
+        // 1. Loading file from url:
+        var xhr = new XMLHttpRequest(url);
+        xhr.open('GET', url, true); // url is the url of a PNG image.
+        xhr.responseType = 'arraybuffer';
+        xhr.callback = callback;
+        xhr.onload = function () {
+            if (this.status == 200) { // 2. When loaded, do:
+                var imgBase64 = self._converterEngine(this.response); // convert BLOB to base64
+                this.callback(imgBase64); //execute callback function with data
+            }
+        };
+        xhr.send();
+    };
+
+    HotMap.prototype.fetchIndicator = function (img) {
+        var self = this;
+        self._functionStack.push(function (cb) {
+            self._getImageBase64('img/' + img, function (data) {
+                $("#myImage").attr("src", "data:image/svg+xml;base64," + data);
+                self._images[img] = 'data:image/svg+xml;base64,' + data;
+                cb();
+            });
+        });
+        return self;
+    };
 
     /**
      * function to fetch data from google sheet
@@ -111,8 +151,8 @@
      */
     HotMap.prototype.resetLight = function () {
         _.forEach(this._dataPoints, function (point) {
-            if (point.cellInTheMap) {
-                point.cellInTheMap.attr('filter', null);
+            if (point.cellInTheMap && point.cellInTheMap.backArea) {
+                point.cellInTheMap.backArea.attr('filter', null);
             }
         });
     };
@@ -126,7 +166,7 @@
         this.resetLight();
         _.forEach(this._dataPoints, function (point) {
             if (point.cellInTheMap && ~possibleValues.indexOf(point[keyInTheDataPoint])) {
-                point.cellInTheMap.attr('filter', 'url(#lighten)');
+                point.cellInTheMap.backArea.attr('filter', 'url(#lighten)');
             }
         });
     };
@@ -141,7 +181,7 @@
         var self = this;
         _.forEach(this._dataPoints, function (point) {
             if (point.cellInTheMap && point[keyInTheDataPoint] === matchedValue) {
-                self._viewManager.appendIconIfNotExist(point.cellInTheMap, point, iconName, MARK_CLASS);
+                self._viewManager.appendIconIfNotExist(point.cellInTheMap, point, self._images[iconName], MARK_CLASS);
             }
         });
     };

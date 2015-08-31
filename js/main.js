@@ -7,7 +7,7 @@
  * @author lovefreya
  */
 
-(function (global, config, HotMap, Controller) {
+(function (global, config, HotMap, Controller, Exporter) {
     'use strict';
 
 
@@ -45,6 +45,7 @@
      * 4. setup the event listeners to provider some interactions
      */
     hotMap
+        .fetchIndicator('indicator.svg')
         .fetchData(config.spreadsheetDataSource)
         .sortData(config.sortByColumns)
         .countCells(whenTheCellShouldTake2Place)
@@ -66,11 +67,12 @@
                 .on(config.interactionEventNames.TECHNOLOGY_TYPE_SELECTED, function (type) {
                     redraw(type);
                 })
-                .on(config.interactionEventNames.EXPORT, function(){
+                .on(config.interactionEventNames.EXPORT, function (format) {
+                    Exporter('svg#hot-map-svg').to('topcoder-heat-map.' + format);
                 });
         })
         .error(function (err) {
             console.error(err);
         });
 
-}(this, this.TC_APP_CONFIG, this.HotMap, this.HotMapController));
+}(this, this.TC_APP_CONFIG, this.HotMap, this.HotMapController, this.SVGExporter));
