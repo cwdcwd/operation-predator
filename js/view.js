@@ -257,7 +257,7 @@
             .attr('y', position.y)
             .attr('height', EDGE_LENGTH_OF_CELL)
             .attr('fill', this._generateFill(point))
-            .attr('filter', 'url(#inset-shadow)');
+            .attr('filter', 'url(#lighten)');
         if (point.numberOfCells > 1) {
             cell.attr('width', (EDGE_LENGTH_OF_CELL * 2 + MARGIN_OF_CELL));
             this._cellPositions[this._positionIndex + this._numberOfRows].occupied = true;
