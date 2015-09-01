@@ -115,6 +115,7 @@
         //need to clean the whole svg
         this._init();
 
+        this._svg.attr('width', '100%');
         this._scale.width = $('.hot-map svg').width() * 0.94;
         this._numberOfColumns = Math.min(parseInt(this._scale.width / (MARGIN_OF_CELL + EDGE_LENGTH_OF_CELL)), this._numberOfAllCells);
         this._numberOfRows = Math.ceil(this._numberOfAllCells / this._numberOfColumns);
