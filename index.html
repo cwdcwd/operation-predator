@@ -99,7 +99,7 @@
                 <!-- enhance the brightness -->
                 <filter id="lighten">
                     <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
-                    <feSpecularLighting result="specOut" in="blur" specularConstant="1.2" specularExponent="12"
+                    <feSpecularLighting result="specOut" in="blur" specularConstant="1.3" specularExponent="12"
                                         lighting-color="#ffffff">
                         <feDistantLight azimuth="35" elevation="35"/>
                     </feSpecularLighting>
@@ -108,18 +108,6 @@
                 </filter>
             </defs>
         </svg>
-    </div>
-    <div class="legend">
-        <!-- Hot legend -->
-        <span>Hot</span>
-        <ul>
-            <li class="first"></li>
-            <li class="second"></li>
-            <li class="third"></li>
-            <li class="fourth"></li>
-            <li class="fifth"></li>
-        </ul>
-        <span>Cold</span>
     </div>
 </section>
 
