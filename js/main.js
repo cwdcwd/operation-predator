@@ -51,6 +51,7 @@
         .countCells(whenTheCellShouldTake2Place)
         .drawMap()
         .then(function (data, techTypes) {
+            hotMap.markIcon(config.communityReadinessKeyName, 'Y', 'indicator.svg'); //append widely used icon to tails
             ctrl
                 .init(techTypes)
                 .on(config.interactionEventNames.SALEABILITY, function (saleAbilityValues) {
@@ -61,9 +62,8 @@
                     hotMap.removeIcons();
                     redraw('*');
                 })
-                .on(config.interactionEventNames.COMMUNITY_READY, function () {
-                    hotMap.markIcon(config.communityReadinessKeyName, 'Y', 'indicator.svg');
-                })
+                //.on(config.interactionEventNames.COMMUNITY_READY, function () {
+                //})
                 .on(config.interactionEventNames.TECHNOLOGY_TYPE_SELECTED, function (type) {
                     redraw(type);
                 })
