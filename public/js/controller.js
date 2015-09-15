@@ -47,7 +47,7 @@
         self._saleAbilitySlider.slider({
             tooltip: 'hide'
         });
-        self._saleAbilityLabel.text('None selected.');
+        self._saleAbilityLabel.text('All selected.');
         //this function used for updating label
         self._saleAbilitySlider.on('slideStop', function (slideEvt) {
             var text;
@@ -98,7 +98,7 @@
                             fn(['WC']);
                             break;
                         case 3:
-                            fn(['Y']);
+                            fn(['Y', 'WC']);
                             break;
                         case 4:
                             fn(['N', 'WC', 'Y']);
@@ -108,7 +108,7 @@
                 break;
             case self._eventNames.RESET:
                 self._resetBtn.on('click', function () {
-                    self._saleAbilityLabel.text('None selected.');
+                    self._saleAbilityLabel.text('All selected.');
                     self._techTypeDropdown
                         .text('Select a Technology Type')
                         .append('<span class="caret"></span>');
@@ -130,8 +130,10 @@
                 break;
             case self._eventNames.EXPORT:
                 $('#export-as-png').on('click', function () {
-                    //TODO impl this export function based on a 'canvas' solution
-                    fn();
+                    if (document.getElementById('export-png').checked) {
+                        return fn('png');
+                    }
+                    fn('jpg');
                 });
 
                 break;

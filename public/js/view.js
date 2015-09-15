@@ -13,12 +13,12 @@
     var HIDE_CLASS          = 'hide',
         EDGE_LENGTH_OF_CELL = 117,
         MARGIN_OF_CELL      = 12,
-        HOT_CLASSES_MAPPING = {
-            1: 'very-hot',
-            2: 'some-hot',
-            3: 'so-so',
-            4: 'no-hot',
-            5: 'never-hot'
+        HOT_FILL_MAPPING    = {
+            1: '#EB6045',
+            2: '#FDC171',
+            3: '#D2EC9B',
+            4: '#69C3A4',
+            5: '#4AA3B1'
         };
 
     function ViewManager(options) {
@@ -71,6 +71,42 @@
         this._numberOfAllCells = n;
     };
 
+    ViewManager.prototype._drawLegend = function () {
+        var lengend = this._svg
+                .append('g'),
+            startY  = this._scale.height / 2 - 200,
+            startX  = (MARGIN_OF_CELL + EDGE_LENGTH_OF_CELL) * this._numberOfColumns + 45;
+
+        lengend.append('text')
+            .text('Hot')
+            .attr('x', startX)
+            .attr('y', startY)
+            .attr('text-anchor', 'middle')
+            .attr('style', 'font-size:22px;color:#333E48;');
+
+        for (var i = 1; i < 6; i++) {
+            lengend.append('rect')
+                .attr('width', 50)
+                .attr('height', 70)
+                .attr('fill', HOT_FILL_MAPPING[i])
+                .attr('x', startX - 25)
+                .attr('y', startY + 75 * (i - 1) + 20)
+                .attr('filter', 'url(#inset-shadow)');
+            lengend.append('text')
+                .text(i)
+                .attr('x', startX + 40)
+                .attr('y', startY + 75 * i - 10)
+                .attr('style', 'font-size:30px;color:#333E48;');
+        }
+        lengend.append('text')
+            .text('Cold')
+            .attr('x', startX)
+            .attr('y', startY + 425)
+            .attr('text-anchor', 'middle')
+            .attr('style', 'font-size:22px;color:#333E48;');
+        this._svg.attr('width', startX+70);
+    };
+
     /**
      * define the size of the map
      * @returns {ViewManager}
@@ -79,12 +115,16 @@
         //need to clean the whole svg
         this._init();
 
-        this._scale.width = $('.hot-map svg').width();
-        this._numberOfColumns = parseInt(this._scale.width / EDGE_LENGTH_OF_CELL);
+        this._svg.attr('width', '100%');
+        this._scale.width = $('.hot-map svg').width() * 0.94;
+        this._numberOfColumns = Math.min(parseInt(this._scale.width / (MARGIN_OF_CELL + EDGE_LENGTH_OF_CELL)), this._numberOfAllCells);
         this._numberOfRows = Math.ceil(this._numberOfAllCells / this._numberOfColumns);
+        this._scale.height = Math.max((MARGIN_OF_CELL + EDGE_LENGTH_OF_CELL) * this._numberOfRows+20, 500);
 
         this._svg
-            .attr('height', (MARGIN_OF_CELL + EDGE_LENGTH_OF_CELL) * this._numberOfRows);
+            .attr('height', this._scale.height);
+        console.log(this._numberOfColumns);
+        this._drawLegend();
         return this;
     };
 
@@ -96,8 +136,8 @@
         for (i = 0; i < this._numberOfColumns; i++) {
             for (j = 0; j < this._numberOfRows; j++) {
                 this._cellPositions.push({
-                    x: i * (MARGIN_OF_CELL + EDGE_LENGTH_OF_CELL),
-                    y: j * (MARGIN_OF_CELL + EDGE_LENGTH_OF_CELL),
+                    x: i * (MARGIN_OF_CELL + EDGE_LENGTH_OF_CELL)+10,
+                    y: j * (MARGIN_OF_CELL + EDGE_LENGTH_OF_CELL)+10,
                     occupied: false
                 });
             }
@@ -105,13 +145,13 @@
     };
 
     /**
-     * generate class for the hot level of each cell
+     * generate fill for the hot level of each cell
      * @param point
      * @returns {*}
      * @private
      */
-    ViewManager.prototype._generateClass = function (point) {
-        return HOT_CLASSES_MAPPING[parseInt(point[this._hotKey])];
+    ViewManager.prototype._generateFill = function (point) {
+        return HOT_FILL_MAPPING[parseInt(point[this._hotKey])];
     };
 
     /**
@@ -216,13 +256,15 @@
             .attr('x', position.x)
             .attr('y', position.y)
             .attr('height', EDGE_LENGTH_OF_CELL)
-            .attr('class', this._generateClass(point))
-            .attr('filter', 'url(#inset-shadow)');
+            .attr('fill', this._generateFill(point))
+            .attr('filter', 'url(#lighten)');
         if (point.numberOfCells > 1) {
             cell.attr('width', (EDGE_LENGTH_OF_CELL * 2 + MARGIN_OF_CELL));
             this._cellPositions[this._positionIndex + this._numberOfRows].occupied = true;
         } else
             cell.attr('width', EDGE_LENGTH_OF_CELL);
+
+        return cell;
     };
 
     /**
@@ -239,7 +281,7 @@
 
         var group = this._svg.append('g');
 
-        this._renderCell(group, position, point);
+        group.backArea = this._renderCell(group, position, point);
 
         this._renderText(group, position, point);
         this._positionIndex++;
@@ -254,7 +296,7 @@
      * @param iconName
      * @param className
      */
-    ViewManager.prototype.appendIconIfNotExist = function (group, point, iconName, className) {
+    ViewManager.prototype.appendIconIfNotExist = function (group, point, iconDataUri, className) {
         if ((group.selectAll('image.' + className))[0].length > 0) {
             return;
         }
@@ -267,7 +309,7 @@
             .attr('y', (parseInt(y) - 15))
             .attr('width', 60)
             .attr('height', 40)
-            .attr('xlink:href', 'img/' + iconName)
+            .attr('xlink:href', iconDataUri)
             .attr('class', className);
     };
 

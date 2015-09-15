@@ -7,7 +7,7 @@
  * @author lovefreya
  */
 
-(function (global, config, HotMap, Controller) {
+(function (global, config, HotMap, Controller, Exporter) {
     'use strict';
 
 
@@ -35,6 +35,7 @@
             .countCells(whenTheCellShouldTake2Place)
             .drawMap()
             .then(function () {
+                hotMap.markIcon(config.communityReadinessKeyName, 'Y', 'indicator.svg'); //append widely used icon to tails
             });
     }
 
@@ -45,11 +46,13 @@
      * 4. setup the event listeners to provider some interactions
      */
     hotMap
+        .fetchIndicator('indicator.svg')
         .fetchData(config.spreadsheetDataSource)
         .sortData(config.sortByColumns)
         .countCells(whenTheCellShouldTake2Place)
         .drawMap()
         .then(function (data, techTypes) {
+            hotMap.markIcon(config.communityReadinessKeyName, 'Y', 'indicator.svg'); //append widely used icon to tails
             ctrl
                 .init(techTypes)
                 .on(config.interactionEventNames.SALEABILITY, function (saleAbilityValues) {
@@ -60,17 +63,17 @@
                     hotMap.removeIcons();
                     redraw('*');
                 })
-                .on(config.interactionEventNames.COMMUNITY_READY, function () {
-                    hotMap.markIcon(config.communityReadinessKeyName, 'Y', 'indicator.svg');
-                })
+                //.on(config.interactionEventNames.COMMUNITY_READY, function () {
+                //})
                 .on(config.interactionEventNames.TECHNOLOGY_TYPE_SELECTED, function (type) {
                     redraw(type);
                 })
-                .on(config.interactionEventNames.EXPORT, function(){
+                .on(config.interactionEventNames.EXPORT, function (format) {
+                    Exporter('svg#hot-map-svg').to('topcoder-heat-map.' + format);
                 });
         })
         .error(function (err) {
             console.error(err);
         });
 
-}(this, this.TC_APP_CONFIG, this.HotMap, this.HotMapController));
+}(this, this.TC_APP_CONFIG, this.HotMap, this.HotMapController, this.SVGExporter));

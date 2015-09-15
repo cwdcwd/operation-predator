@@ -34,11 +34,11 @@
                 </div>
             </section>
 
-            <section>
-                <h1>Community Readiness:</h1>
-                <!-- button to toggle all ready technologies -->
-                <button id="mark-ready" class="btn btn-sm btn-default">Mark Ready</button>
-            </section>
+            <!--<section>-->
+                <!--<h1>Community Readiness:</h1>-->
+                <!--&lt;!&ndash; button to toggle all ready technologies &ndash;&gt;-->
+                <!--<button id="mark-ready" class="btn btn-sm btn-default">Mark Ready</button>-->
+            <!--</section>-->
 
             <section>
                 <h1>Technology Type:</h1>
@@ -74,7 +74,7 @@
 <section id="main-content">
     <div class="loading"></div>
     <div class="hot-map hide">
-        <svg id="hot-map-svg">
+        <svg id="hot-map-svg" version="1.1" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <!-- inner shadow filter -->
                 <filter id="inset-shadow">
@@ -99,7 +99,7 @@
                 <!-- enhance the brightness -->
                 <filter id="lighten">
                     <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
-                    <feSpecularLighting result="specOut" in="blur" specularConstant="1.2" specularExponent="12"
+                    <feSpecularLighting result="specOut" in="blur" specularConstant="1.3" specularExponent="12"
                                         lighting-color="#ffffff">
                         <feDistantLight azimuth="35" elevation="35"/>
                     </feSpecularLighting>
@@ -108,18 +108,6 @@
                 </filter>
             </defs>
         </svg>
-    </div>
-    <div class="legend">
-        <!-- Hot legend -->
-        <span>Hot</span>
-        <ul>
-            <li class="first"></li>
-            <li class="second"></li>
-            <li class="third"></li>
-            <li class="fourth"></li>
-            <li class="fifth"></li>
-        </ul>
-        <span>Cold</span>
     </div>
 </section>
 
@@ -136,6 +124,7 @@
 <script src="libs/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="libs/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
 <script src="libs/d3/d3.min.js"></script>
+<script src="js/exporter.js"></script>
 
 <!-- app source files -->
 <script src="js/config.js"></script>

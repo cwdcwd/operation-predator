@@ -27,7 +27,7 @@
         cellDisplayTitle: 'Technologies',
         cellDisplayDesc: 'Technology Type',
         saleAbilityKeyName: 'Should we sell? (Yes/No/With Care)',
-        communityReadinessKeyName: 'Crowd-Ready? (Y/N/NA/ND)',
+        communityReadinessKeyName: 'Widely Used on TC',
 
         //event names to listen
         interactionEventNames: {
