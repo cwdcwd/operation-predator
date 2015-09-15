@@ -35,6 +35,7 @@
             .countCells(whenTheCellShouldTake2Place)
             .drawMap()
             .then(function () {
+                hotMap.markIcon(config.communityReadinessKeyName, 'Y', 'indicator.svg'); //append widely used icon to tails
             });
     }
 
