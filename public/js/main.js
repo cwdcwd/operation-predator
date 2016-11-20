@@ -76,4 +76,8 @@
             console.error(err);
         });
 
+    // _.debounce so we don't redraw too often.
+    $(window).on('resize', _.debounce(function() {
+        redraw("*");
+    }, 100));
 }(this, this.TC_APP_CONFIG, this.HotMap, this.HotMapController, this.SVGExporter));
