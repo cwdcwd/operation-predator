@@ -117,7 +117,8 @@
 
         this._svg.attr('width', '100%');
         this._scale.width = $('.hot-map svg').width() * 0.94;
-        this._numberOfColumns = Math.min(parseInt(this._scale.width / (MARGIN_OF_CELL + EDGE_LENGTH_OF_CELL)), this._numberOfAllCells);
+        // - 70 to make space for the legend.
+        this._numberOfColumns = Math.min(parseInt((this._scale.width - 70) / (MARGIN_OF_CELL + EDGE_LENGTH_OF_CELL)), this._numberOfAllCells);
         this._numberOfRows = Math.ceil(this._numberOfAllCells / this._numberOfColumns);
         this._scale.height = Math.max((MARGIN_OF_CELL + EDGE_LENGTH_OF_CELL) * this._numberOfRows+20, 500);
 
@@ -221,6 +222,7 @@
          * process title text
          */
         _.forEach(titleLines, function (line, index) {
+            line = line || '';
             group.append('text')
                 .text(line)
                 .attr('x', position.x + (point.numberOfCells > 1 ? (EDGE_LENGTH_OF_CELL * 2 + MARGIN_OF_CELL) : EDGE_LENGTH_OF_CELL) / 2)

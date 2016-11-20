@@ -28,7 +28,6 @@
 }
 body {
   font-family: Myriad Pro;
-  width: 1786px;
   margin: auto;
   background-color: #DFE3EB;
 }
@@ -39,6 +38,8 @@ header#main-header {
   -webkit-flex-direction: row;
   justify-content: space-between;
   -webkit-justify-content: space-between;
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
   margin: 26px 0;
 }
 header#main-header div {
